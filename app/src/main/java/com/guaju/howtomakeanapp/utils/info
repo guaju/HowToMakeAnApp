@@ -1,0 +1,20 @@
+工具类：
+SharePreferenceUtils：存和读 sharedPreference的信息；
+JsonUtils:  解析Json数据的工具类；
+ToastUtils: 谈自定义吐司的工具类；
+Md5Utils:加密工具类；
+dp2px:dp转px工具类；
+PackageUtils：判断当前app的版本号 包信息的工具类；
+TimeUtils:拿到当前时间，或者把时间转化成特殊格式的工具类；
+BitmapUtils：可以压缩，也可以矩阵搓圆；
+NetUtils：判断当前网络状态的工具类；
+LogUtils：打印log工具类；
+DialogUtils:对话框工具类
+PopwindowUtils:气泡工具类
+MeasureUtils:测量工具类
+FileUtils：文件工具类
+
+
+
+
+
