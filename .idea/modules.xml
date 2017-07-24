@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HowToMakeAnApp.iml" filepath="$PROJECT_DIR$/HowToMakeAnApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/androidh5/androidh5.iml" filepath="$PROJECT_DIR$/androidh5/androidh5.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
