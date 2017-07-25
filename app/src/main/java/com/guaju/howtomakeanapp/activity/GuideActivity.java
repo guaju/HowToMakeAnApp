@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.guaju.howtomakeanapp.R;
 import com.guaju.howtomakeanapp.adpter.GuideAdapter;
@@ -50,6 +49,36 @@ public class GuideActivity extends AppCompatActivity {
         setContentView(R.layout.activity_guide);
         initView();
         initData();
+        initEvent();
+    }
+
+    private void initEvent() {
+        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                resetCirlceIndicater();
+                ImageView iv = (ImageView) ll.getChildAt(position);
+                iv.setImageResource(R.drawable.selected);
+
+
+            }
+
+            private void resetCirlceIndicater() {
+                for (int i=0;i<ll.getChildCount();i++){
+                    ((ImageView) ll.getChildAt(i)).setImageResource(R.drawable.normal);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void initView() {
@@ -84,6 +113,7 @@ public class GuideActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     updateFace();
+
                                 }
                             });
 
@@ -106,9 +136,10 @@ public class GuideActivity extends AppCompatActivity {
             Glide.with(GuideActivity.this)
                     .using(new ProgressModelLoader(new ProgressHandler(GuideActivity.this, progressImageView)))
                     .load(str)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .placeholder(R.drawable.loading).into(imageView);
             lists.add(progressImageView);
+
+            //将小圆点图片添加到linearlayout 里面去
             ImageView iv=new ImageView(GuideActivity.this);
             iv.setImageResource(R.drawable.normal);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(50, 50);
@@ -116,9 +147,9 @@ public class GuideActivity extends AppCompatActivity {
             iv.setLayoutParams(layoutParams);
             ll.addView(iv);
 
-
-
         }
+        ImageView firstIv = (ImageView) ll.getChildAt(0);
+        firstIv.setImageResource(R.drawable.selected);
         GuideAdapter guideAdapter = new GuideAdapter(GuideActivity.this, lists);
         vp.setAdapter(guideAdapter);
 
