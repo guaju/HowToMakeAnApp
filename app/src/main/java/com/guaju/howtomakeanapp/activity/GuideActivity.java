@@ -2,6 +2,7 @@ package com.guaju.howtomakeanapp.activity;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,6 +11,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.OvershootInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -36,12 +42,13 @@ import java.util.ArrayList;
  * Created by guaju on 2017/7/24.
  */
 
-public class GuideActivity extends AppCompatActivity {
+public class GuideActivity extends AppCompatActivity  implements View.OnClickListener{
 
     private ArrayList<String> guidepic;
     private ArrayList<ProgressImageView> lists = new ArrayList<>();
     private ViewPager vp;
     private LinearLayout ll;
+    private Button bt;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +60,7 @@ public class GuideActivity extends AppCompatActivity {
     }
 
     private void initEvent() {
+        bt.setOnClickListener(this);
         vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -64,6 +72,14 @@ public class GuideActivity extends AppCompatActivity {
                 resetCirlceIndicater();
                 ImageView iv = (ImageView) ll.getChildAt(position);
                 iv.setImageResource(R.drawable.selected);
+                if (position==guidepic.size()-1){
+                    ll.setVisibility(View.INVISIBLE);
+                    bt.setVisibility(View.VISIBLE);
+                    Animation animation = AnimationUtils.loadAnimation(GuideActivity.this, R.anim.enter_from_bottom);
+                    animation.setInterpolator(new OvershootInterpolator());
+                    bt.setAnimation(animation);
+                }
+
 
 
             }
@@ -72,6 +88,8 @@ public class GuideActivity extends AppCompatActivity {
                 for (int i=0;i<ll.getChildCount();i++){
                     ((ImageView) ll.getChildAt(i)).setImageResource(R.drawable.normal);
                 }
+                bt.setVisibility(View.GONE);
+                ll.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -84,6 +102,8 @@ public class GuideActivity extends AppCompatActivity {
     private void initView() {
         vp = (ViewPager) findViewById(R.id.vp);
         ll = (LinearLayout) findViewById(R.id.ll);
+        bt = (Button) findViewById(R.id.bt);
+        bt.setVisibility(View.GONE);
         vp.setOffscreenPageLimit(0);
     }
 
@@ -152,6 +172,21 @@ public class GuideActivity extends AppCompatActivity {
         firstIv.setImageResource(R.drawable.selected);
         GuideAdapter guideAdapter = new GuideAdapter(GuideActivity.this, lists);
         vp.setAdapter(guideAdapter);
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.bt:
+                startActivity(new Intent(GuideActivity.this,SplashActivity.class));
+                break;
+            default:
+                break;
+
+        }
+
+
 
     }
 
