@@ -2,13 +2,20 @@ package com.guaju.howtomakeanapp.activity;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentTabHost;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.guaju.howtomakeanapp.R;
+import com.guaju.howtomakeanapp.base.BaseActivity;
 import com.guaju.howtomakeanapp.bean.UpdateAppBean;
+import com.guaju.howtomakeanapp.fragment.ChatFragment;
+import com.guaju.howtomakeanapp.fragment.MainFragment;
+import com.guaju.howtomakeanapp.fragment.MineFragment;
 import com.guaju.howtomakeanapp.httputils.OkHttpUtils;
 import com.guaju.howtomakeanapp.utils.DialogUtils;
 import com.guaju.howtomakeanapp.utils.PackageUtils;
@@ -83,21 +90,43 @@ import java.io.IOException;
 
 
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     String path="https://guaju.github.io/versioninfo.json";
     private String currentVersion;
     private String version;
     private UpdateAppBean.DataBean data;
+    private FragmentTabHost fth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkUpdate();
+        initView();
 
 
 
 
+    }
+
+    private void initView() {
+        View bottomIndicator = getBottomIndicator();
+
+        fth = (FragmentTabHost) findViewById(android.R.id.tabhost);
+        //关联内容
+        fth.setup(this,getSupportFragmentManager(),android.R.id.tabcontent);
+        TabHost.TabSpec mainSpec = fth.newTabSpec("home").setIndicator(bottomIndicator);
+        TabHost.TabSpec chatSpec = fth.newTabSpec("chat").setIndicator("聊天");
+        TabHost.TabSpec mineSpec = fth.newTabSpec("mine").setIndicator("个人中心");
+        fth.addTab(mainSpec, MainFragment.class,null);
+        fth.addTab(chatSpec, ChatFragment.class,null);
+        fth.addTab(mineSpec, MineFragment.class,null);
+
+
+    }
+
+    private View getBottomIndicator() {
+        return LayoutInflater.from(this).inflate(R.layout.main_indicator,null,false);
     }
 
     private void checkUpdate() {

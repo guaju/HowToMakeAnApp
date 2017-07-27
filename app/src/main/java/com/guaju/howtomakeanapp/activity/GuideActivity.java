@@ -28,6 +28,7 @@ import com.guaju.howtomakeanapp.constants.HttpConstants;
 import com.guaju.howtomakeanapp.httputils.OkHttpUtils;
 import com.guaju.howtomakeanapp.model.progress.ProgressImageView;
 import com.guaju.howtomakeanapp.model.progress.ProgressModelLoader;
+import com.guaju.howtomakeanapp.utils.SPUtils;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
@@ -54,9 +55,21 @@ public class GuideActivity extends AppCompatActivity  implements View.OnClickLis
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide);
+        if ((boolean) SPUtils.getInstance(this, "config").getSp("isfirst", false)){
+            startActivity(new Intent(GuideActivity.this,SplashActivity.class));
+            return;
+        };
         initView();
         initData();
         initEvent();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        this.finish();
+
+
     }
 
     private void initEvent() {
@@ -179,13 +192,13 @@ public class GuideActivity extends AppCompatActivity  implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.bt:
+                SPUtils.getInstance(this,"config").putSP("isfirst",true);
                 startActivity(new Intent(GuideActivity.this,SplashActivity.class));
                 break;
             default:
                 break;
 
         }
-
 
 
     }
@@ -220,4 +233,5 @@ public class GuideActivity extends AppCompatActivity  implements View.OnClickLis
             }
         }
     }
+
 }

@@ -41,14 +41,14 @@
             />
 
     </LinearLayout>
-    <TextView
-        android:layout_marginBottom="80dp"
+    <com.guaju.howtomakeanapp.widget.KaitiTextView
+        android:padding="10dp"
+        android:layout_marginBottom="20dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="这里啥都有"
-        android:textStyle="italic"
+        android:text="这里啥都有，空山新雨后，天气晚来秋，明月松间照，清泉石上流，竹喧归浣女，莲动下渔舟，随意春芳歇，王孙恣可留"
         android:textSize="20sp"
 
         />

@@ -3,9 +3,6 @@ package com.guaju.howtomakeanapp.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import static android.R.attr.value;
-import static android.R.id.edit;
-
 /**
  * Created by guaju on 2017/7/25.
  */
@@ -41,22 +38,21 @@ public class SPUtils {
         edit.commit();
     }
     public  static Object getSp(String key,Object def){
+        Object value=null;
         if (sp!=null){
             if (def instanceof Integer) {
-                sp.getInt(key, (int) def);
+               value= sp.getInt(key, (int) def);
             } else if (def instanceof Boolean) {
-                sp.getBoolean(key, (boolean) def);
+                value= sp.getBoolean(key, (boolean) def);
             } else if (def instanceof String) {
-                sp.getString(key, (String) def);
+                value= sp.getString(key, (String) def);
             } else if (def instanceof Float) {
-                sp.getFloat(key, (float) def);
+                value= sp.getFloat(key, (float) def);
             } else if (def instanceof Long) {
-                sp.getLong(key, (long) def);
+                value= sp.getLong(key, (long) def);
             }
         }
-        
-        
-        return null;
+        return value;
     }
 
 
