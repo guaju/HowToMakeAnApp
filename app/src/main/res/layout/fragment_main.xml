@@ -8,5 +8,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="main"/>
+    <Button
+        android:id="@+id/bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="点击跳转淘宝"/>
 
 </LinearLayout>
