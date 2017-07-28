@@ -6,7 +6,9 @@ import android.support.v4.app.FragmentTabHost;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -110,14 +112,14 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initView() {
-        View bottomIndicator = getBottomIndicator();
+
 
         fth = (FragmentTabHost) findViewById(android.R.id.tabhost);
         //关联内容
         fth.setup(this,getSupportFragmentManager(),android.R.id.tabcontent);
-        TabHost.TabSpec mainSpec = fth.newTabSpec("home").setIndicator(bottomIndicator);
-        TabHost.TabSpec chatSpec = fth.newTabSpec("chat").setIndicator("聊天");
-        TabHost.TabSpec mineSpec = fth.newTabSpec("mine").setIndicator("个人中心");
+        TabHost.TabSpec mainSpec = fth.newTabSpec("home").setIndicator(getBottomIndicator("首页",R.drawable.selector_main));
+        TabHost.TabSpec chatSpec = fth.newTabSpec("chat").setIndicator(getBottomIndicator("聊天",R.drawable.selector_chat));
+        TabHost.TabSpec mineSpec = fth.newTabSpec("mine").setIndicator(getBottomIndicator("个人中心",R.drawable.selector_mine));
         fth.addTab(mainSpec, MainFragment.class,null);
         fth.addTab(chatSpec, ChatFragment.class,null);
         fth.addTab(mineSpec, MineFragment.class,null);
@@ -125,8 +127,17 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    private View getBottomIndicator() {
-        return LayoutInflater.from(this).inflate(R.layout.main_indicator,null,false);
+    private View getBottomIndicator(String title,int drawable) {
+//        BottomIndicator bottomIndicator = new BottomIndicator(this);
+//        bottomIndicator.setTextAndImage(title,drawable);
+//        return bottomIndicator;
+        View v = LayoutInflater.from(this).inflate(R.layout.main_indicator,null,false);
+        TextView tv = (TextView) v.findViewById(R.id.tv);
+        ImageView iv= (ImageView) v.findViewById(R.id.iv);
+        tv.setText(title);
+        iv.setBackgroundResource(drawable);
+        return v;
+
     }
 
     private void checkUpdate() {
