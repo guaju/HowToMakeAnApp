@@ -3,6 +3,7 @@ package com.guaju.howtomakeanapp.adpter;
 import android.app.Activity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import com.guaju.howtomakeanapp.app.MySingleThreadPool;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 /**
  * Created by guaju on 2017/7/24.
@@ -62,9 +65,11 @@ public class AdsAdapter extends PagerAdapter {
     }
     public void startPlay(final ViewPager vp){
         currentPostion = vp.getCurrentItem();
+        Log.e(TAG, "guajustartPlay: "+currentPostion );
         MySingleThreadPool.getInstance().execute(new Runnable() {
             @Override
             public void run() {
+                if (timer==null){
                timer=new Timer();
                timer.schedule(new TimerTask() {
                     @Override
@@ -84,6 +89,7 @@ public class AdsAdapter extends PagerAdapter {
                     }
                 },1000,1000);
             }
+        }
         });
     }
     public void controlVP(final ViewPager vp){
@@ -112,4 +118,10 @@ public class AdsAdapter extends PagerAdapter {
          });
     }
 
+    public void stopLoop(){
+        if (timer!=null){
+            timer.cancel();
+            timer=null;
+        }
+    }
 }

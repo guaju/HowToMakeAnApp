@@ -1,8 +1,9 @@
 package com.guaju.howtomakeanapp.model.progress;
 
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.ResponseBody;
 import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.ForwardingSource;
@@ -30,22 +31,13 @@ public class ProgressResponseBody extends ResponseBody {
 
     @Override
     public long contentLength() {
-        try {
-            return responseBody.contentLength();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return 0;
+        return responseBody.contentLength();
     }
 
     @Override
     public BufferedSource source() {
         if (bufferedSource == null) {
-            try {
-                bufferedSource = Okio.buffer(source(responseBody.source()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            bufferedSource = Okio.buffer(source(responseBody.source()));
         }
         return bufferedSource;
     }

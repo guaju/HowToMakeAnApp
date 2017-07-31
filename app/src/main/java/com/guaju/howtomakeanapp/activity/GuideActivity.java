@@ -25,19 +25,17 @@ import com.guaju.howtomakeanapp.R;
 import com.guaju.howtomakeanapp.adpter.GuideAdapter;
 import com.guaju.howtomakeanapp.bean.GuideBean;
 import com.guaju.howtomakeanapp.constants.HttpConstants;
+import com.guaju.howtomakeanapp.httputils.BaseCallBack;
 import com.guaju.howtomakeanapp.httputils.OkHttpUtils;
 import com.guaju.howtomakeanapp.model.progress.ProgressImageView;
 import com.guaju.howtomakeanapp.model.progress.ProgressModelLoader;
 import com.guaju.howtomakeanapp.utils.SPUtils;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+
+import okhttp3.Response;
 
 /**
  * Created by guaju on 2017/7/24.
@@ -121,43 +119,48 @@ public class GuideActivity extends AppCompatActivity  implements View.OnClickLis
     }
 
     private void initData() {
-        final Request req = new Request.Builder()
-                .get()
-                .url(HttpConstants.guide)
-                .build();
-        OkHttpClient instance = OkHttpUtils.getInstance();
-        Call call = instance.newCall(req);
-        call.enqueue(new Callback() {
+        OkHttpUtils instance = OkHttpUtils.getInstance();
+        instance.get(HttpConstants.guide, null, new BaseCallBack() {
             @Override
-            public void onFailure(Request request, IOException e) {
+            public void onError() {
 
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String json = response.body().string();
+            public void onSuccess(Response response) {
+                String json = null;
+                try {
+                    json = response.body().string();
                     Gson gson = new Gson();
                     GuideBean guideBean = gson.fromJson(json, GuideBean.class);
                     if (guideBean != null) {
-                        if (200 == guideBean.getStatus()) {
-                            guidepic = (ArrayList<String>) guideBean.getData().getGuidepic();
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    updateFace();
+                    if (200 == guideBean.getStatus()) {
+                        guidepic = (ArrayList<String>) guideBean.getData().getGuidepic();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateFace();
 
-                                }
-                            });
-
-                        }
-
+                            }
+                        });
 
                     }
 
+
                 }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailed() {
+
             }
         });
+
     }
 
     private void updateFace() {

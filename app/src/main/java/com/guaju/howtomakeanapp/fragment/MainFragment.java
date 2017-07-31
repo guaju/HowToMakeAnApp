@@ -3,6 +3,7 @@ package com.guaju.howtomakeanapp.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -13,10 +14,17 @@ import com.guaju.howtomakeanapp.R;
 import com.guaju.howtomakeanapp.adpter.AdsAdapter;
 import com.guaju.howtomakeanapp.base.BaseFragment;
 import com.guaju.howtomakeanapp.constants.HttpConstants;
+import com.guaju.howtomakeanapp.httputils.BaseCallBack;
 import com.guaju.howtomakeanapp.model.GetAds;
+import com.guaju.howtomakeanapp.model.WaresHot;
 import com.guaju.howtomakeanapp.widget.BottomIndicator;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.Response;
+
+import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 /**
  * Created by guaju on 2017/7/27.
@@ -55,6 +63,53 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
             }
         };
         getAds.getAds(HttpConstants.guide);
+        //获得list数据
+        WaresHot.getWaresHot(new BaseCallBack() {
+            @Override
+            public void onError() {
+
+            }
+
+            @Override
+            public void onSuccess(Response res) {
+                try {
+                    String json = res.body().string();
+                    Log.e(TAG, "onSuccess: "+json);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        });
+        WaresHot.getWaresHot(new BaseCallBack() {
+            @Override
+            public void onError() {
+
+            }
+
+            @Override
+            public void onSuccess(Response response) {
+                try {
+                    String string = response.body().string();
+                    Log.e(TAG, "onSuccess: "+string );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        });
+
+
+
+
     }
 
     @Override
@@ -79,4 +134,26 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         intent.setClassName("com.taobao.taobao", "com.taobao.tao.detail.activity.DetailActivity");
         startActivity(intent);
     }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+         if (hidden){
+             if (adsAdapter!=null){
+                 int currentItem = vp.getCurrentItem();
+                 Log.e(TAG, "guajuonHiddenChanged: 隐藏 "+currentItem );
+                 adsAdapter.stopLoop();
+             }
+         } else{
+             if (adsAdapter!=null) {
+                 int currentItem = vp.getCurrentItem();
+                 Log.e(TAG, "guajuonHiddenChanged: 显示 "+currentItem );
+                 adsAdapter.startPlay(vp);
+
+             }
+         }
+
+    }
+
+
 }

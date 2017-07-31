@@ -2,7 +2,6 @@ package com.guaju.howtomakeanapp.activity;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTabHost;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,15 +17,15 @@ import com.guaju.howtomakeanapp.bean.UpdateAppBean;
 import com.guaju.howtomakeanapp.fragment.ChatFragment;
 import com.guaju.howtomakeanapp.fragment.MainFragment;
 import com.guaju.howtomakeanapp.fragment.MineFragment;
+import com.guaju.howtomakeanapp.httputils.BaseCallBack;
 import com.guaju.howtomakeanapp.httputils.OkHttpUtils;
 import com.guaju.howtomakeanapp.utils.DialogUtils;
 import com.guaju.howtomakeanapp.utils.PackageUtils;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import com.guaju.howtomakeanapp.widget.TabFragmentHost;
 
 import java.io.IOException;
+
+import okhttp3.Response;
 
 /* 如何去开发一款app
    1.这个app是做什么的？
@@ -97,7 +96,7 @@ public class MainActivity extends BaseActivity {
     private String currentVersion;
     private String version;
     private UpdateAppBean.DataBean data;
-    private FragmentTabHost fth;
+    private TabFragmentHost fth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +113,7 @@ public class MainActivity extends BaseActivity {
     private void initView() {
 
 
-        fth = (FragmentTabHost) findViewById(android.R.id.tabhost);
+        fth = (TabFragmentHost) findViewById(android.R.id.tabhost);
         //关联内容
         fth.setup(this,getSupportFragmentManager(),android.R.id.tabcontent);
         TabHost.TabSpec mainSpec = fth.newTabSpec("home").setIndicator(getBottomIndicator("首页",R.drawable.selector_main));
@@ -141,39 +140,39 @@ public class MainActivity extends BaseActivity {
     }
 
     private void checkUpdate() {
-        //创建builder对象
-        Request.Builder builder = new Request.Builder();
-        Request request = builder.get()
-                .url(path)
-                .build();
-        //得到call对象
-        Call call = OkHttpUtils.getInstance().newCall(request);
-        call.enqueue(new Callback() {
+        OkHttpUtils.getInstance().get(path, null, new BaseCallBack() {
             @Override
-            public void onFailure(Request request, IOException e) {
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                Toast.makeText(MainActivity.this, "失败", Toast.LENGTH_SHORT).show();
+            public void onError() {
 
-                   }
-               });
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
-//                int code = response.code();
-//                if (200==code){
-//                    Toast.makeText(MainActivity.this, "成功", Toast.LENGTH_SHORT).show();
-//                }
+            public void onSuccess(Response response) {
                 if (response.isSuccessful()){
-                    String json = response.body().string();
-                    parseJson(json);
+                    String json = null;
+                    try {
+                        json = response.body().string();
+                        parseJson(json);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+            }
+            @Override
+            public void onFailed() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "失败", Toast.LENGTH_SHORT).show();
 
-
+                    }
+                });
             }
         });
+
+
+
+
 
     }
 
@@ -182,7 +181,7 @@ public class MainActivity extends BaseActivity {
         if (TextUtils.isEmpty(json)){
             return;
         }
-        Gson gson=new Gson();
+        Gson gson=OkHttpUtils.getGson();
         UpdateAppBean updateBean = gson.fromJson(json, UpdateAppBean.class);
         if ("200".equals(updateBean.getStatus())){
             data = updateBean.getData();

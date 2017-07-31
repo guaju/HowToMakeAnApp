@@ -3,15 +3,14 @@ package com.guaju.howtomakeanapp.model;
 import android.app.Activity;
 import android.os.Environment;
 
+import com.guaju.howtomakeanapp.httputils.BaseCallBack;
 import com.guaju.howtomakeanapp.httputils.OkHttpUtils;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import okhttp3.Response;
 
 /**
  * Created by guaju on 2017/7/21.
@@ -19,32 +18,29 @@ import java.io.IOException;
 
 public class DownLoader {
 
-    public static void downLoadAndInstallApk(final Activity act,String url){
-        final Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .build();
-        Call call = OkHttpUtils.getInstance().newCall(request);
-        call.enqueue(new DownLoaderCallBack(act));
+    public static void downLoadAndInstallApk(final Activity act, String url) {
+        OkHttpUtils.getInstance().get(url,null,new DownLoaderCallBack(act));
     }
 
 
-
-    private static class DownLoaderCallBack implements Callback{
+    public static class DownLoaderCallBack extends BaseCallBack {
         private Activity act;
-        private DownLoaderCallBack(Activity act){
-            this.act=act;
+
+        private DownLoaderCallBack(Activity act) {
+            this.act = act;
+
+        }
+
+
+        @Override
+        public void onError() {
 
         }
 
         @Override
-        public void onFailure(Request request, IOException e) {
-
-        }
-
-        @Override
-        public void onResponse(Response response) throws IOException {
+        public void onSuccess(Response response) {
             if (response.isSuccessful()){
+               try{
                 byte[] bytes = response.body().bytes();
                 if (bytes!=null&&bytes.length>0){
                     File dir = new File(Environment.getExternalStorageDirectory()+"/how");
@@ -62,10 +58,17 @@ public class DownLoader {
                     bytes=null;
                     //然后就要安装了
                     InstallApk.InstallApk(act,file);
-
-
                 }
-            }
+            }catch (IOException e){
+                   throw new RuntimeException("下载apk异常");
+               }
+
+        }
+        }
+
+        @Override
+        public void onFailed() {
+
         }
     }
 }

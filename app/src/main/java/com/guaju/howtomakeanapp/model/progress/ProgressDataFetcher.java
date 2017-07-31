@@ -2,14 +2,18 @@ package com.guaju.howtomakeanapp.model.progress;
 
 import android.os.Handler;
 import android.os.Message;
+
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.data.DataFetcher;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+
 import java.io.IOException;
 import java.io.InputStream;
+
+import okhttp3.Call;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by chenpengfei on 2016/11/9.
@@ -31,7 +35,7 @@ public class ProgressDataFetcher implements DataFetcher<InputStream> {
     public InputStream loadData(Priority priority) throws Exception {
         Request request = new Request.Builder().url(url).build();
         OkHttpClient client = new OkHttpClient();
-        client.interceptors().add(new ProgressInterceptor(getProgressListener()));
+        client.interceptors().add((Interceptor) new ProgressInterceptor(getProgressListener()));
         try {
             progressCall = client.newCall(request);
             Response response = progressCall.execute();

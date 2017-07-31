@@ -1,8 +1,9 @@
 package com.guaju.howtomakeanapp.model.progress;
 
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.Response;
 import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.Response;
 
 /**
  * Created by chenpengfei on 2016/11/9.
