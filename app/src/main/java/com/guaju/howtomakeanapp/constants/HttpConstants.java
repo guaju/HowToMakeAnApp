@@ -5,7 +5,6 @@ package com.guaju.howtomakeanapp.constants;
  */
 
 public class HttpConstants {
-
     public static final String login="http://192.168.190.188/Goods/app/common/login.json";
     private static final String hosts = "https://guaju.github.io/";
     public static final String guide = hosts + "guide.json";
@@ -49,7 +48,6 @@ public class HttpConstants {
         public static final String ADDRESS_LIST = BASE_URL + "addr/list";
         public static final String ADDRESS_CREATE = BASE_URL + "addr/create";
         public static final String ADDRESS_UPDATE = BASE_URL + "addr/update";
-
         public static final String FAVORITE_LIST = BASE_URL + "favorite/list";
 
     }
