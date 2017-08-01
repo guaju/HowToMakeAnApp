@@ -72,8 +72,16 @@ public class OkHttpUtils {
 
    public void postData(String url,Map<String,String> paramMap,BaseCallBack callBack){
        Request.Builder builder = new Request.Builder();
-       Set<Map.Entry<String, String>> entries = paramMap.entrySet();
        FormBody.Builder formBody = new FormBody.Builder();
+       if (paramMap==null){
+           FormBody body = formBody.build();
+           Request request = builder.url(url)
+                   .post(body)
+                   .build();
+           Call call = okHttpClient.newCall(request);
+           call.enqueue(callBack);
+       }else{
+       Set<Map.Entry<String, String>> entries = paramMap.entrySet();
        for (Map.Entry<String, String> map:entries){
            formBody.add(map.getKey(),map.getValue());
        }
@@ -84,30 +92,60 @@ public class OkHttpUtils {
        Call call = okHttpClient.newCall(request);
        call.enqueue(callBack);
 
+       }
+
+
+
    };
    //上传图片的post请求
    public void postMult(String url, String imageParam,Map<String, String> paramMap, BaseCallBack callBack
    ,File ... file){
+       //声明一个文件类型
+       /*
+       属性：
+        text/html ： HTML格式
+        text/plain ：纯文本格式
+        text/xml ：  XML格式
+        image/gif ：gif图片格式
+        image/jpeg ：jpg图片格式
+        image/png：png图片格式
+        以application开头的媒体格式类型：
+
+        application/xhtml+xml ：XHTML格式
+        application/xml     ： XML数据格式
+        application/atom+xml  ：Atom XML聚合格式
+        application/json    ： JSON数据格式
+        application/pdf       ：pdf格式
+        application/msword  ： Word文档格式
+        application/octet-stream ： 二进制流数据（如常见的文件下载）
+        */
+
+
+
 
        MediaType mediaType = MediaType.parse("image/png");
-
-       MultipartBody.Builder multiBody = new MultipartBody.Builder();
-       multiBody.setType(mediaType);
+       //创建一个复杂类型的请求体
+//       MultipartBody.Builder multiBody = new MultipartBody.Builder();
+//       multiBody.setType(MultipartBody.FORM);
+       MultipartBody.Builder multipartBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+       //遍历上传文件
        if (file!=null&&file.length>0) {
            for (File fi : file) {
                RequestBody requestBody = RequestBody.create(mediaType, fi);
-               multiBody.addFormDataPart(imageParam, fi.getName(), requestBody);
+               multipartBuilder.addFormDataPart(imageParam, fi.getName(), requestBody);
            }
        }
-       Request.Builder builder = new Request.Builder();
+       //遍历参数
        if (!(paramMap==null&&paramMap.isEmpty())){
        Set<Map.Entry<String, String>> entries = paramMap.entrySet();
        for (Map.Entry<String, String> map:entries){
-           multiBody.addFormDataPart(map.getKey(),map.getValue());
+           multipartBuilder.addFormDataPart(map.getKey(),map.getValue());
        }
        }
-       MultipartBody body = multiBody.build();
-       Request request = builder.url(url)
+       //最终得到请求体
+       MultipartBody body = multipartBuilder.build();
+       //使用okhttpclient做上传
+       Request request = new Request.Builder().url(url)
                .post(body)
                .build();
        Call call = okHttpClient.newCall(request);

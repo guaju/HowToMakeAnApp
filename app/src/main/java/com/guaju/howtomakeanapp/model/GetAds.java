@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.guaju.howtomakeanapp.bean.GuideBean;
+import com.guaju.howtomakeanapp.constants.HttpConstants;
 import com.guaju.howtomakeanapp.httputils.BaseCallBack;
 import com.guaju.howtomakeanapp.httputils.OkHttpUtils;
 
@@ -52,6 +53,11 @@ public abstract  class GetAds {
         });
 
 
+
+    }
+
+    public static  void getAds2(BaseCallBack callBack){
+        OkHttpUtils.getInstance().postData(HttpConstants.ADS,null,callBack);
 
     }
 

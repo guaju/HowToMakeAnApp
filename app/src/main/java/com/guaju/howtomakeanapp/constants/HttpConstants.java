@@ -5,7 +5,11 @@ package com.guaju.howtomakeanapp.constants;
  */
 
 public class HttpConstants {
+    //EDFFC6B8B60D4C40879B9D08FA0FB84E
+    public static final String QINIU="http://qiniu.libaiwu.com.cn/";
+    public static final String ADS="http://www.libaiwu.com.cn/api/index/index";
     public static final String login="http://192.168.190.188/Goods/app/common/login.json";
+    public static final String upload="http://192.168.190.188/Goods/app/item/issue.json";
     private static final String hosts = "https://guaju.github.io/";
     public static final String guide = hosts + "guide.json";
     public static final String COMPAINGAIN_ID = "compaigin_id";
