@@ -1,6 +1,7 @@
 package com.guaju.howtomakeanapp.activity;
 
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -23,6 +24,8 @@ import com.guaju.howtomakeanapp.utils.DialogUtils;
 import com.guaju.howtomakeanapp.utils.PackageUtils;
 import com.guaju.howtomakeanapp.widget.TabFragmentHost;
 
+import org.zackratos.ultimatebar.UltimateBar;
+
 import java.io.IOException;
 
 import okhttp3.Response;
@@ -39,6 +42,10 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        UltimateBar ultimateBar = new UltimateBar(this);
+        ultimateBar.setTransparentBar(Color.BLUE, 50);
+
         checkUpdate();
         initView();
 

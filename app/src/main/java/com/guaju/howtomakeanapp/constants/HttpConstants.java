@@ -35,7 +35,7 @@ public class HttpConstants {
 
         public static final String WARES_HOT = BASE_URL + "wares/hot?curPage=0&pageSize=10";
         public static final String WARES_LIST = BASE_URL + "wares/list";
-        public static final String WARES_CAMPAIN_LIST = BASE_URL + "wares/campaign/list";
+        public static final String WARES_CAMPAIN_LIST = BASE_URL + "wares/campaign/list?curPage=0&pageSize=10";
         public static final String WARES_DETAIL = BASE_URL + "wares/detail.html";
 
         public static final String CATEGORY_LIST = BASE_URL + "category/list";
