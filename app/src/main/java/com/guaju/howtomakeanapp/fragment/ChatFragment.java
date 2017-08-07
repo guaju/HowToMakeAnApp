@@ -7,6 +7,8 @@ import android.view.View;
 import com.guaju.howtomakeanapp.R;
 import com.guaju.howtomakeanapp.base.BaseFragment;
 import com.guaju.howtomakeanapp.bean.WareHot;
+import com.guaju.howtomakeanapp.http.HttpHelper;
+import com.guaju.howtomakeanapp.http.MyTask;
 import com.guaju.howtomakeanapp.http.RetrofitUtil;
 
 import retrofit2.Call;
@@ -26,7 +28,7 @@ import rx.schedulers.Schedulers;
 
 /*
 rxjava
-是一个使用了观察序列的，能够实现基于事件的异步处理效果
+是一个使用了观察序列的，能够实现基于事件的异步处理的框架，本质上还是用了观察者模式
 
 跨线程操作
 handler
@@ -43,7 +45,15 @@ public class ChatFragment extends BaseFragment {
     private static final String TAG = "ChatFragment";
     @Override
     public void initData() {
-        initRxJava2();
+        HttpHelper.getInstance().getWareHot(new MyTask() {
+            @Override
+            public void run() {
+                Log.e(TAG, "run: "+getWareHot().getCopyright() );
+            }
+        });
+
+
+
     }
 
     private void initRxJava2() {
