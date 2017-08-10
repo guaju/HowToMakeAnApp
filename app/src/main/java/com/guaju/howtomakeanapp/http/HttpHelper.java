@@ -44,7 +44,7 @@ public class HttpHelper {
         return httpHelper;
     }
 
-    public void getWareHot(MyTask runnable){
+    public void getWareHot(final MyTask runnable){
         Observable<WareHot> wares = api.getWare("wares");
         wares.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

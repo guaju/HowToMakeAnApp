@@ -19,4 +19,7 @@ public interface API {
     Observable<WareHot> getWare(@Path("type") String type);
 
 
+
+
+
 }

@@ -27,10 +27,20 @@
                 android:gravity="center"
                 />
 
+            <TextView
+                android:id="@+id/tv_event"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="hehe"
+                android:textSize="19sp"
+                />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+
         </LinearLayout>
     </ScrollView>
 

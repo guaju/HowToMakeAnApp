@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -19,10 +20,16 @@ import com.guaju.howtomakeanapp.adpter.AdsAdapter;
 import com.guaju.howtomakeanapp.base.BaseFragment;
 import com.guaju.howtomakeanapp.bean.ADSBean;
 import com.guaju.howtomakeanapp.constants.HttpConstants;
+import com.guaju.howtomakeanapp.event.InfoEvent;
 import com.guaju.howtomakeanapp.httputils.BaseCallBack;
 import com.guaju.howtomakeanapp.httputils.OkHttpUtils;
 import com.guaju.howtomakeanapp.model.GetAds;
+import com.guaju.howtomakeanapp.utils.SimpleImageLoader;
 import com.guaju.howtomakeanapp.widget.BottomIndicator;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,6 +53,7 @@ public class MainFragment2 extends BaseFragment implements View.OnClickListener,
     private ViewPager vp;
     private SliderLayout sl;
     private RecyclerView rv;
+    private TextView tv_event;
 
     @Override
     public void initData() {
@@ -83,9 +91,17 @@ public class MainFragment2 extends BaseFragment implements View.OnClickListener,
 
             }
         });
-
+        SimpleImageLoader.getInsance().save(getActivity(),"https://n.sinaimg.cn/tech/crawl/20170226/yrbm-fyawhqy2124261.jpg");
 
     }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onMessageEvent(InfoEvent event) {
+        String address = event.getAddress();
+        String name = event.getName();
+        int age = event.getAge();
+        tv_event.setText(address);
+    };
 
     private void initSlider(List<ADSBean.DataBean.BannerBean> banner) {
         for (ADSBean.DataBean.BannerBean bean:banner){
@@ -110,7 +126,7 @@ public class MainFragment2 extends BaseFragment implements View.OnClickListener,
         View v = inflater.inflate(R.layout.fragment_main2, null, false);
         sl = (SliderLayout) v.findViewById(slider);
         rv = (RecyclerView) v.findViewById(R.id.rv);
-
+        tv_event = (TextView) v.findViewById(R.id.tv_event);
         initEvent();
         return v;
     }
@@ -155,5 +171,18 @@ public class MainFragment2 extends BaseFragment implements View.OnClickListener,
         Bundle bundle = slider.getBundle();
         String tag = bundle.getString("tag");
         Log.e(TAG, "onSliderClick: "+tag);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

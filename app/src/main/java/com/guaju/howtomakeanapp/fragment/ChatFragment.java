@@ -18,6 +18,7 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 
@@ -59,7 +60,12 @@ public class ChatFragment extends BaseFragment {
     private void initRxJava2() {
         Observable.just("hehe").
                 observeOn(AndroidSchedulers.mainThread())
-                .subscribe(a-> Log.e(TAG, "initRxJava2: "+a));
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.e(TAG, "initRxJava2: " + s);
+                    }
+                });
 
 
     }

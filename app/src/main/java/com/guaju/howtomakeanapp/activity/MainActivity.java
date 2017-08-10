@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.guaju.howtomakeanapp.R;
 import com.guaju.howtomakeanapp.base.BaseActivity;
 import com.guaju.howtomakeanapp.bean.UpdateAppBean;
+import com.guaju.howtomakeanapp.event.InfoEvent;
 import com.guaju.howtomakeanapp.fragment.ChatFragment;
 import com.guaju.howtomakeanapp.fragment.MainFragment2;
 import com.guaju.howtomakeanapp.fragment.MineFragment;
@@ -22,8 +23,10 @@ import com.guaju.howtomakeanapp.httputils.BaseCallBack;
 import com.guaju.howtomakeanapp.httputils.OkHttpUtils;
 import com.guaju.howtomakeanapp.utils.DialogUtils;
 import com.guaju.howtomakeanapp.utils.PackageUtils;
+import com.guaju.howtomakeanapp.utils.SimpleImageLoader;
 import com.guaju.howtomakeanapp.widget.TabFragmentHost;
 
+import org.greenrobot.eventbus.EventBus;
 import org.zackratos.ultimatebar.UltimateBar;
 
 import java.io.IOException;
@@ -48,7 +51,6 @@ public class MainActivity extends BaseActivity {
 
         checkUpdate();
         initView();
-
 
 
 
@@ -118,6 +120,17 @@ public class MainActivity extends BaseActivity {
 
 
 
+    }
+    public void send(View v){
+
+
+        EventBus.getDefault().post(new InfoEvent("小明",8,"96区生命宝珠"));
+
+        try {
+            SimpleImageLoader.getInsance().removeFromDisk("https://n.sinaimg.cn/tech/crawl/20170226/yrbm-fyawhqy2124261.jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void parseJson(String json) {

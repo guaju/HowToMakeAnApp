@@ -227,10 +227,6 @@ public class TabFragmentHost extends TabHost implements
 			// normally happen.
 			info.fragment = mFragmentManager.findFragmentByTag(tag);
 			if (info.fragment != null && !info.fragment.isDetached()) {
-				FragmentTransaction ft = mFragmentManager.beginTransaction();
-				// ft.detach(info.fragment);
-				ft.hide(info.fragment);
-				ft.commit();
 			}
 		}
 

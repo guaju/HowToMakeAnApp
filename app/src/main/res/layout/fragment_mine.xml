@@ -9,4 +9,15 @@
         android:layout_height="wrap_content"
         android:text="main"/>
 
+    <Button
+        android:id="@+id/bt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="传递事件"
+        android:onClick="send"
+        />
+    <ImageView
+        android:id="@+id/iv_imageloader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>
